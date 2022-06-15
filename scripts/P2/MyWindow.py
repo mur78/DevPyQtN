@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
-from ui import P2_QtEventHandling_MyWidgetsForm_design
+from ui import Form1
 import time
 
 # Задания:
@@ -37,24 +37,24 @@ import time
 
 
 # noinspection PyCallingNonCallable
-class MyWidgetsForm(QtWidgets.QWidget):
+class MyWidgetsForm(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MyWidgetsForm, self).__init__(parent)
-        self.ui = P2_QtEventHandling_MyWidgetsForm_design.Ui_Form()
+        self.ui = Form1.Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.setMouseTracking(True)
 
-        self.ui.comboBox.addItems(["HEX", "DEC", "OCT", "BIN"])
-        self.ui.comboBox.currentIndexChanged.connect(self.changeLCDview)
-        self.ui.pushButtonGetData.clicked.connect(self.getScreenInfo)
-        self.ui.pushButtonLB.clicked.connect(self.editPosition)
-        self.ui.pushButtonLT.clicked.connect(self.editPosition)
-        self.ui.pushButtonRB.clicked.connect(self.editPosition)
-        self.ui.pushButtonRT.clicked.connect(self.editPosition)
-        self.ui.pushButtonCenter.clicked.connect(self.editPosition)
+        self.ui.HexLable.addItems(["HEX", "DEC", "OCT", "BIN"])
+        self.ui.HexLable.currentIndexChanged.connect(self.changeLCDview)
+        self.ui.GetData.clicked.connect(self.getScreenInfo)
+        self.ui.RightUp.clicked.connect(self.editPosition)
+        self.ui.LeftUp.clicked.connect(self.editPosition)
+        self.ui.LeftDown.clicked.connect(self.editPosition)
+        self.ui.RightDown.clicked.connect(self.editPosition)
+        self.ui.Center.clicked.connect(self.editPosition)
 
-        self.ui.pushButtonGetData.setShortcut(QtGui.QKeySequence("F1"))
+        self.ui.GetData.setShortcut(QtGui.QKeySequence("F1"))
 
         self.ui.dial.valueChanged.connect(self.showLCD)
         self.ui.horizontalSlider.valueChanged.connect(self.showLCD)
@@ -70,7 +70,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
     def getScreenInfo(self):
         """Получение параметров экрана"""
         screens_count = QtWidgets.QApplication.screens()
-        log = self.ui.plainTextEdit.appendPlainText
+        log = self.ui.textEdit.appendPlainText
 
         log(time.ctime())
         log(f"{11*'='} SystemInfo {11*'='}")
@@ -118,7 +118,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
         a = {"HEX": self.ui.lcdNumber.setHexMode, "BIN": self.ui.lcdNumber.setBinMode,
              "OCT": self.ui.lcdNumber.setOctMode, "DEC": self.ui.lcdNumber.setDecMode}
 
-        a[self.ui.comboBox.currentText()]()
+        a[self.ui.HexLable.currentText()]()
         print(self.ui.lcdNumber.mode())
 
 
@@ -130,21 +130,21 @@ class MyWidgetsForm(QtWidgets.QWidget):
     def changeEvent(self, event: QtCore.QEvent) -> None:
         if event.type() == QtCore.QEvent.WindowStateChange:
             if self.isMinimized():
-                self.ui.plainTextEdit.appendPlainText(time.ctime() + ": window is minimized")
+                self.ui.textEdit.appendPlainText(time.ctime() + ": window is minimized")
             elif self.isMaximized():
-                self.ui.plainTextEdit.appendPlainText(time.ctime() + ": window is maximized")
+                self.ui.textEdit.appendPlainText(time.ctime() + ": window is maximized")
         if event.type() == QtCore.QEvent.ActivationChange:
-            self.ui.plainTextEdit.appendPlainText(time.ctime() + ": window is active")
+            self.ui.textEdit.append(time.ctime() + ": window is active")
 
         QtWidgets.QWidget.changeEvent(self, event)
 
     def showEvent(self, event:QtGui.QShowEvent) -> None:
-        self.ui.plainTextEdit.appendPlainText(time.ctime() + ": window is show")
+        self.ui.textEdit.append(time.ctime() + ": window is show")
 
         QtWidgets.QWidget.showEvent(self, event)
 
     def hideEvent(self, event:QtGui.QHideEvent) -> None:
-        self.ui.plainTextEdit.appendPlainText(time.ctime() + ": window is hide")
+        self.ui.textEdit.append(time.ctime() + ": window is hide")
         QtWidgets.QWidget.hideEvent(self, event)
 
     def moveEvent(self, event:QtGui.QMoveEvent) -> None:
@@ -180,7 +180,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
             if event.text() == "-":
                 self.ui.dial.setValue(self.ui.dial.value()-1)
 
-            self.ui.plainTextEdit.appendPlainText(f"dial value {self.ui.dial.value()}")
+            self.ui.textEdit.appendPlainText(f"dial value {self.ui.dial.value()}")
 
 
         return super(MyWidgetsForm, self).eventFilter(watched, event)
