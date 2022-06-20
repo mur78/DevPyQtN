@@ -70,7 +70,7 @@ class MyWidgetsForm(QtWidgets.QMainWindow):
     def getScreenInfo(self):
         """Получение параметров экрана"""
         screens_count = QtWidgets.QApplication.screens()
-        log = self.ui.textEdit.appendPlainText
+        log = self.ui.textEdit.append
 
         log(time.ctime())
         log(f"{11*'='} SystemInfo {11*'='}")
@@ -130,9 +130,9 @@ class MyWidgetsForm(QtWidgets.QMainWindow):
     def changeEvent(self, event: QtCore.QEvent) -> None:
         if event.type() == QtCore.QEvent.WindowStateChange:
             if self.isMinimized():
-                self.ui.textEdit.appendPlainText(time.ctime() + ": window is minimized")
+                self.ui.textEdit.append(time.ctime() + ": window is minimized")
             elif self.isMaximized():
-                self.ui.textEdit.appendPlainText(time.ctime() + ": window is maximized")
+                self.ui.textEdit.append(time.ctime() + ": window is maximized")
         if event.type() == QtCore.QEvent.ActivationChange:
             self.ui.textEdit.append(time.ctime() + ": window is active")
 
@@ -180,7 +180,7 @@ class MyWidgetsForm(QtWidgets.QMainWindow):
             if event.text() == "-":
                 self.ui.dial.setValue(self.ui.dial.value()-1)
 
-            self.ui.textEdit.appendPlainText(f"dial value {self.ui.dial.value()}")
+            self.ui.textEdit.append(f"dial value {self.ui.dial.value()}")
 
 
         return super(MyWidgetsForm, self).eventFilter(watched, event)
